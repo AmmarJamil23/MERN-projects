@@ -16,7 +16,7 @@ app.use('/api/auth', authRoutes);
 app.use('/api/projects', projectRoutes);
 
 app.get('/', (req, res) => {
-  res.send('DevConnect backend is running...');
+  res.send('DevConnect backend is running and is connected to MongoDB');
 });
 
 const PORT = process.env.PORT || 5000;
