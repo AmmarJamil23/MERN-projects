@@ -1,36 +1,38 @@
-import React from 'react'
-import { useState } from 'react';
+import React, { useState } from 'react';
 import api from '../api';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
-   const navigate = useNavigate();
-   const [form, setForm] = useState({email: "", password: ""});
+  const navigate = useNavigate();
+  const { login } = useAuth(); // take login function from AuthContext
+  const [form, setForm] = useState({ email: "", password: "" });
 
-   const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value});
-   }
+  const handleChange = (e) => {
+    setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
-   const handleSubmit = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const res = await api.post("/auth/login", form);
-      localStorage.setItem("token", res.data.token);
-      alert("Login successful!");
-      navigate("/dashboard");
 
+      // Save token using AuthContext
+      login(res.data.token);
+
+      alert("Login successful!");
+      navigate("/dashboard"); // Redirect to dashboard
 
     } catch (err) {
       alert(err.response?.data?.message || "Login failed");
-
     }
-   }
+  };
 
   return (
-    <div className='max-w-md mx-auto'>
-      <h1 className='text-3xl font-bold mb-4'>Login</h1>
-      <form className='flex flex-col gap-3' onSubmit={handleSubmit}>
-            <input
+    <div className="max-w-md mx-auto">
+      <h1 className="text-3xl font-bold mb-4">Login</h1>
+      <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
+        <input
           className="border p-2"
           name="email"
           placeholder="Email"
@@ -46,10 +48,10 @@ const Login = () => {
           required
         />
 
-        <button className='bg-green-500 text-white p-2'>Login</button>
+        <button className="bg-green-500 text-white p-2">Login</button>
       </form>
     </div>
-  )
-}
+  );
+};
 
-export default Login
+export default Login;
