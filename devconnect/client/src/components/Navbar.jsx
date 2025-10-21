@@ -17,6 +17,7 @@ export default function Navbar() {
 
       {token ? (
         <>
+        
           <Link to="/dashboard">Dashboard</Link>
           <button onClick={handleLogout} className="text-red-500">
             Logout

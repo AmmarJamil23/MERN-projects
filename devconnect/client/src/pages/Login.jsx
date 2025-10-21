@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
   const navigate = useNavigate();
-  const { login } = useAuth(); // take login function from AuthContext
+  const { login } = useAuth();
   const [form, setForm] = useState({ email: "", password: "" });
 
   const handleChange = (e) => {
@@ -16,13 +16,9 @@ const Login = () => {
     e.preventDefault();
     try {
       const res = await api.post("/auth/login", form);
-
-      // Save token using AuthContext
       login(res.data.token);
-
       alert("Login successful!");
-      navigate("/dashboard"); // Redirect to dashboard
-
+      navigate("/dashboard");
     } catch (err) {
       alert(err.response?.data?.message || "Login failed");
     }
@@ -32,15 +28,17 @@ const Login = () => {
     <div className="max-w-md mx-auto">
       <h1 className="text-3xl font-bold mb-4">Login</h1>
       <form className="flex flex-col gap-3" onSubmit={handleSubmit}>
+        
         <input
-          className="border p-2"
+          className="border p-2 w-full rounded focus:outline-blue-500"
           name="email"
           placeholder="Email"
           onChange={handleChange}
           required
         />
+
         <input
-          className="border p-2"
+          className="border p-2 w-full rounded focus:outline-blue-500"
           name="password"
           type="password"
           placeholder="Password"
@@ -48,7 +46,9 @@ const Login = () => {
           required
         />
 
-        <button className="bg-green-500 text-white p-2">Login</button>
+        <button className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded w-full transition">
+          Login
+        </button>
       </form>
     </div>
   );

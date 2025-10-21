@@ -26,7 +26,10 @@ export default function Explore() {
       ) : (
         <div className="grid gap-4">
           {projects.map((p) => (
-            <div key={p._id} className="p-4 border rounded">
+            <div
+              key={p._id}
+              className="p-4 border rounded shadow-sm bg-white hover:shadow-md transition"
+            >
               <h2 className="text-xl font-semibold">{p.title}</h2>
               <p>{p.description}</p>
               <p className="text-sm text-gray-600 mb-1">
@@ -42,7 +45,7 @@ export default function Explore() {
                     className="text-blue-500 underline"
                     target="_blank"
                   >
-                    GitHub
+                    GitGitHub
                   </a>
                 )}
                 {" | "}

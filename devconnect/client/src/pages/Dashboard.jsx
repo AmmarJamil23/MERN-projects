@@ -45,7 +45,7 @@ export default function Dashboard() {
       fetchProjects();
       alert("Project added!");
     } catch (err) {
-      console.log(err)
+      console.log(err);
       alert("Failed to add project");
     }
   };
@@ -57,42 +57,47 @@ export default function Dashboard() {
       {/* CREATE FORM */}
       <form className="space-y-3 border p-4 rounded" onSubmit={handleSubmit}>
         <input
-          className="border p-2 w-full"
+          className="border p-2 w-full rounded focus:outline-blue-500"
           name="title"
           placeholder="Title"
           value={form.title}
           onChange={handleChange}
           required
         />
+
         <textarea
-          className="border p-2 w-full"
+          className="border p-2 w-full rounded focus:outline-blue-500"
           name="description"
           placeholder="Description"
           value={form.description}
           onChange={handleChange}
         ></textarea>
+
         <input
-          className="border p-2 w-full"
+          className="border p-2 w-full rounded focus:outline-blue-500"
           name="techStack"
           placeholder="Tech stack (comma-separated e.g. React, Node)"
           value={form.techStack}
           onChange={handleChange}
         />
+
         <input
-          className="border p-2 w-full"
+          className="border p-2 w-full rounded focus:outline-blue-500"
           name="githubLink"
           placeholder="GitHub Link"
           value={form.githubLink}
           onChange={handleChange}
         />
+
         <input
-          className="border p-2 w-full"
+          className="border p-2 w-full rounded focus:outline-blue-500"
           name="liveLink"
           placeholder="Live Link"
           value={form.liveLink}
           onChange={handleChange}
         />
-        <button className="bg-orange-400 text-white p-2 w-full">
+
+        <button className="bg-blue-600 hover:bg-blue-700 text-white p-2 rounded w-full transition">
           Add Project
         </button>
       </form>
@@ -103,7 +108,10 @@ export default function Dashboard() {
       ) : (
         <div className="grid gap-4">
           {projects.map((p) => (
-            <div key={p._id} className="p-4 border rounded">
+            <div
+              key={p._id}
+              className="p-4 border rounded shadow-sm bg-white hover:shadow-md transition"
+            >
               <h2 className="text-xl font-semibold">{p.title}</h2>
               <p>{p.description}</p>
               <p className="text-sm text-gray-600">
