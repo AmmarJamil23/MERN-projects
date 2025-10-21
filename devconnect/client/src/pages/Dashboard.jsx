@@ -3,6 +3,13 @@ import api from "../api";
 
 export default function Dashboard() {
   const [projects, setProjects] = useState([]);
+  const [form, setForm] = useState({
+    title: "",
+    description: "",
+    techStack: "",
+    githubLink: "",
+    liveLink: "",
+  });
 
   const fetchProjects = async () => {
     try {
@@ -18,10 +25,79 @@ export default function Dashboard() {
     fetchProjects();
   }, []);
 
-  return (
-    <div className="max-w-3xl mx-auto">
-      <h1 className="text-3xl font-bold mb-4">My Projects</h1>
+  const handleChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
 
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    try {
+      await api.post("/projects", {
+        ...form,
+        techStack: form.techStack.split(",").map((t) => t.trim()),
+      });
+      setForm({
+        title: "",
+        description: "",
+        techStack: "",
+        githubLink: "",
+        liveLink: "",
+      });
+      fetchProjects();
+      alert("Project added!");
+    } catch (err) {
+      console.log(err)
+      alert("Failed to add project");
+    }
+  };
+
+  return (
+    <div className="max-w-3xl mx-auto space-y-6">
+      <h1 className="text-3xl font-bold">My Projects</h1>
+
+      {/* CREATE FORM */}
+      <form className="space-y-3 border p-4 rounded" onSubmit={handleSubmit}>
+        <input
+          className="border p-2 w-full"
+          name="title"
+          placeholder="Title"
+          value={form.title}
+          onChange={handleChange}
+          required
+        />
+        <textarea
+          className="border p-2 w-full"
+          name="description"
+          placeholder="Description"
+          value={form.description}
+          onChange={handleChange}
+        ></textarea>
+        <input
+          className="border p-2 w-full"
+          name="techStack"
+          placeholder="Tech stack (comma-separated e.g. React, Node)"
+          value={form.techStack}
+          onChange={handleChange}
+        />
+        <input
+          className="border p-2 w-full"
+          name="githubLink"
+          placeholder="GitHub Link"
+          value={form.githubLink}
+          onChange={handleChange}
+        />
+        <input
+          className="border p-2 w-full"
+          name="liveLink"
+          placeholder="Live Link"
+          value={form.liveLink}
+          onChange={handleChange}
+        />
+        <button className="bg-orange-400 text-white p-2 w-full">
+          Add Project
+        </button>
+      </form>
+
+      {/* PROJECT LIST */}
       {projects.length === 0 ? (
         <p>No projects yet.</p>
       ) : (
@@ -30,7 +106,30 @@ export default function Dashboard() {
             <div key={p._id} className="p-4 border rounded">
               <h2 className="text-xl font-semibold">{p.title}</h2>
               <p>{p.description}</p>
-              <p className="text-sm text-gray-600">{p.techStack?.join(", ")}</p>
+              <p className="text-sm text-gray-600">
+                {p.techStack?.join(", ")}
+              </p>
+              <div className="text-sm">
+                {p.githubLink && (
+                  <a
+                    href={p.githubLink}
+                    className="text-blue-500 underline"
+                    target="_blank"
+                  >
+                    GitHub
+                  </a>
+                )}
+                {" | "}
+                {p.liveLink && (
+                  <a
+                    href={p.liveLink}
+                    className="text-green-500 underline"
+                    target="_blank"
+                  >
+                    Live
+                  </a>
+                )}
+              </div>
             </div>
           ))}
         </div>
