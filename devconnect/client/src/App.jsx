@@ -1,6 +1,8 @@
 // App.jsx
-import { Routes, Route, Link, useNavigate } from "react-router-dom";
+import { Routes, Route, useNavigate } from "react-router-dom";
 import { useAuth } from "./context/AuthContext";
+import Navbar from "./components/Navbar";
+
 import Home from "./pages/Home";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
@@ -14,23 +16,13 @@ export default function App() {
 
   const handleLogout = () => {
     logout();
-    navigate("/login"); // redirect after logout
+    navigate("/login");
   };
 
   return (
     <div className="p-4">
 
-      <nav className="flex gap-4 mb-4">
-        <Link to="/">Home</Link>
-        <Link to="/explore">Explore</Link>
-
-        {token && <Link to="/dashboard">Dashboard</Link>}
-
-        {!token && <Link to="/login">Login</Link>}
-        {!token && <Link to="/register">Register</Link>}
-
-        {token && <button onClick={handleLogout}>Logout</button>}
-      </nav>
+      <Navbar handleLogout={handleLogout} token={token} />
 
       <Routes>
         <Route path="/" element={<Home />} />
@@ -46,6 +38,7 @@ export default function App() {
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
       </Routes>
+
     </div>
   );
 }
