@@ -8,12 +8,17 @@ export default function Dashboard() {
     description: "",
     techStack: "",
     githubLink: "",
-    liveLink: "",
+    livelink: "",   // renamed
   });
 
   const fetchProjects = async () => {
     try {
-      const res = await api.get("/projects/my");
+      const token = localStorage.getItem("token");
+      const res = await api.get("/projects/my", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
       setProjects(res.data);
     } catch (err) {
       console.error(err);
@@ -31,17 +36,29 @@ export default function Dashboard() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await api.post("/projects", {
-        ...form,
-        techStack: form.techStack.split(",").map((t) => t.trim()),
-      });
+      const token = localStorage.getItem("token");
+
+      await api.post(
+        "/projects",
+        {
+          ...form,
+          techStack: form.techStack.split(",").map((t) => t.trim()),
+        },
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
       setForm({
         title: "",
         description: "",
         techStack: "",
         githubLink: "",
-        liveLink: "",
+        livelink: "",
       });
+
       fetchProjects();
       alert("Project added!");
     } catch (err) {
@@ -54,7 +71,6 @@ export default function Dashboard() {
     <div className="max-w-3xl mx-auto space-y-6">
       <h1 className="text-3xl font-bold">My Projects</h1>
 
-      {/* CREATE FORM */}
       <form className="space-y-3 border p-4 rounded" onSubmit={handleSubmit}>
         <input
           className="border p-2 w-full rounded focus:outline-blue-500"
@@ -91,9 +107,9 @@ export default function Dashboard() {
 
         <input
           className="border p-2 w-full rounded focus:outline-blue-500"
-          name="liveLink"
+          name="livelink"
           placeholder="Live Link"
-          value={form.liveLink}
+          value={form.livelink}
           onChange={handleChange}
         />
 
@@ -102,7 +118,6 @@ export default function Dashboard() {
         </button>
       </form>
 
-      {/* PROJECT LIST */}
       {projects.length === 0 ? (
         <p>No projects yet.</p>
       ) : (
@@ -128,9 +143,9 @@ export default function Dashboard() {
                   </a>
                 )}
                 {" | "}
-                {p.liveLink && (
+                {p.livelink && (
                   <a
-                    href={p.liveLink}
+                    href={p.livelink}
                     className="text-green-500 underline"
                     target="_blank"
                   >
