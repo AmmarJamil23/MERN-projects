@@ -22,3 +22,18 @@ exports.sendMessage = async (req, res) => {
         res.status(500).json({ message: 'Server error'})
     }
 }
+
+exports.getMessages = async (req, res) => {
+    try {
+        const {conversationId} = req.params;
+        const messages = await Message.find({ conversationId}).populate(
+            'senderId',
+            'name email avatar'
+        );
+        res.status(200).json(messages);
+
+    } catch (error) {
+        res.status(500).json({ message: 'Server error'});
+
+    }
+};
